@@ -95,7 +95,7 @@ function App() {
   const [showIPAQForm, setShowIPAQForm] = useState(false);
 
   const handleIPAQFormSubmit = (ipaQResponses) => {
-    console.log(ipaQResponses); // Manejo de las respuestas del formulario IPAQ
+    // console.log(ipaQResponses); // Manejo de las respuestas del formulario IPAQ
     addResult('11', ipaQResponses); // Asumiendo que '11' es el ID del test IPAQ
     setShowIPAQForm(false); // Ocultar el formulario IPAQ
   
@@ -140,9 +140,9 @@ function App() {
   // }, [finished, currentTestId, scores, questions, addResult, alertShown]);
 
   // Este useEffect se asegurará de que cada vez que results se actualice, se imprima el estado actualizado
-  useEffect(() => {
-    console.log('Todos los resultados hasta ahora:', results);
-  }, [results]);
+  // useEffect(() => {
+  //   // console.log('Todos los resultados hasta ahora:', results);
+  // }, [results]);
 
   // Manejador de clic en respuesta actualizado para manejar el fin de las preguntas correctamente
   const handleAnswerClick = (score) => {
