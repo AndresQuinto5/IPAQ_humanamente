@@ -1,0 +1,272 @@
+.App {
+  text-align: center; /* Esto centrará el texto y cualquier elemento inline, como imágenes, pero no los bloques */
+  min-height: 100vh;
+}
+
+/* Añade esta clase en tu archivo CSS */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.form-container h1 {
+  font-size: 2rem; /* Tamaño de fuente inicial */
+  margin-bottom: 20px; /* Espacio entre el título y el primer input del formulario */
+  color: #333; /* Color del texto */
+  /* Puedes añadir más estilos aquí si lo deseas */
+}
+
+
+
+form {
+  width: 100%; /* O el ancho máximo que desees para tu formulario */
+  max-width: 400px; /* Un ancho máximo para que no se vea muy ancho en pantallas grandes */
+  margin: auto; /* Esto centrará tu formulario en el contenedor .form-wrapper */
+  /* Resto de tus estilos para form */
+}
+
+/* Media queries para diferentes tamaños de pantalla */
+@media (max-width: 768px) {
+  .form-container h1 {
+    font-size: 1.75rem; /* Tamaño de fuente más pequeño para pantallas medianas */
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container h1 {
+    font-size: 1.5rem; /* Tamaño de fuente más pequeño para pantallas pequeñas */
+  }
+}
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.ComenzarP {
+  background-color: #002244; /* Azul marino */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.3s;
+
+  /* Centrado horizontalmente */
+  display: block;
+  margin: 20px auto; /* Esto centrará tu botón en el formulario */
+}
+
+.ComenzarP:hover {
+  background-color: #003366; /* Un tono de azul marino más claro */
+  transform: translateY(-2px); /* Eleva ligeramente el botón */
+}
+
+.ComenzarP:active {
+  transform: translateY(1px); /* Efecto de clic */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Esto es para posicionar los botones de las pruebas en la parte superior */
+.test-buttons-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  margin-top: 20px; /* Añade espacio arriba si es necesario */
+}
+
+.test-button {
+  padding: 10px 15px;
+  background-color: #004466; /* Azul marino */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  font-size: 16px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para todos los botones */
+  transform: translateY(0); /* Inicio sin transformación en Y */
+}
+
+.test-button[disabled] {
+  background-color: #ccc; /* Gris para botones deshabilitados */
+}
+
+.test-button:not([disabled]):hover {
+  background-color: #003366; /* Azul más claro para hover */
+  transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+  background-color: #0077CC; /* Azul claro para hover y focus */
+}
+
+.test-button:active {
+  transform: translateY(2px); /* Desplaza hacia abajo al hacer clic */
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2); /* Sombra más pequeña al hacer clic */
+}
+
+.active-test {
+  background-color: #026AA7; /* Azul más oscuro para el test activo */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Sombra más prominente para el test activo */
+}
+
+.test-button.active-test {
+  background-color: #011b35; /* Azul más oscuro para el test activo */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para resaltar */
+  animation: pulse-animation 0.9s infinite;
+}
+
+@keyframes pulse-animation {
+  0% {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  100% {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* apartado de animaciones al finalizar la prueba */
+
+.transition-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.spinner {
+  border: 5px solid #f3f3f3; /* Color claro */
+  border-top: 5px solid #3498db; /* Color del borde superior */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.test-title {
+  text-align: center; /* Centra el texto del título */
+  margin-top: 20px; /* Añade un margen superior si es necesario */
+  font-size: 1rem; /* Ajusta el tamaño de la fuente como prefieras */
+}
+
+
+.send-icon {
+  display: inline-block;
+  transition: transform 0.3s;
+  margin-right: 10px;
+}
+
+/* Nueva animación para el ícono de enviar */
+@keyframes fly-out {
+  to {
+    transform: translateX(500%) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Estilos para el mensaje de confirmación */
+#confirmation-message {
+  margin-top: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 1.2rem;
+}
+
+/* Mostrar el mensaje de confirmación después de enviar */
+.card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 350px; /* Controla el ancho máximo de la tarjeta */
+  margin: auto; /* Centra la tarjeta horizontalmente y verticalmente */
+  text-align: center;
+  /* Ajusta la altura mínima y máxima según sea necesario */
+  min-height: 100px; /* Altura mínima más pequeña */
+  max-height: 80%; /* Asegúrate de que no exceda el 80% de la altura de la pantalla */
+  display: flex; /* Usa flexbox para alinear el contenido */
+  flex-direction: column; /* Alinea el contenido en columna */
+  justify-content: center; /* Centra el contenido verticalmente */
+}
+.send-results-container {
+  display: flex;
+  justify-content: center; /* Alinear verticalmente al centro */
+  align-items: center; /* Alinear horizontalmente al centro */
+  height: 100vh; /* Ocupa toda la altura de la ventana gráfica */
+  padding: 20px; /* Añade algo de espacio alrededor para evitar que toque los bordes */
+}
+
+.send-results-message {
+  font-size: 1.1rem; /* Tamaño de fuente similar al de las preguntas */
+  color: #333; /* Color de fuente oscuro para coincidir con tus preguntas */
+  margin-bottom: 20px; /* Espaciado inferior para separar del botón */
+  /* No se necesita margin-top debido a flexbox y justify-content */
+}
+
+.send-button {
+  background-color: #004466; /* Ajusta el color según tu tema */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 20px; /* Espaciado superior para separar del mensaje */
+  /* No se necesita margin-bottom debido a flexbox y justify-content */
+}
+
+.send-icon {
+  margin-right: 10px;
+}
+.send-button:disabled {
+  background-color: #28a745; /* Gris para botones deshabilitados */
+}
+
+/* Ajustes para el mensaje de confirmación */
+#confirmation-message {
+  font-size: 1rem; /* Ajusta esto según necesites */
+  color: #28a745; /* O el color que prefieras para el mensaje de éxito */
+  margin-top: 20px;
+}
+
+.button-sent {
+  background-color: #28a745; /* Verde */
+}

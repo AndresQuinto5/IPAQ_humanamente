@@ -1,0 +1,178 @@
+/* Estilos específicos para IPAQForm */
+
+/* Estilos para el contenedor del formulario IPAQForm */
+
+  
+/* Estilos para los elementos del formulario IPAQForm */
+.IPAQForm-container .formInput {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Estilo de los campos de entrada y selección específicos para IPAQForm */
+.IPAQForm-container input,
+.IPAQForm-container select {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Estilo para el enfoque en inputs y selects específicos para IPAQForm */
+.IPAQForm-container input:focus,
+.IPAQForm-container select:focus {
+    border-color: #004466;
+    box-shadow: 0 0 5px rgba(0, 68, 102, 0.5);
+    outline: none;
+}
+
+/* Estilos para etiquetas (labels) específicos para IPAQForm */
+.IPAQForm-container .formInput label {
+    margin-bottom: 5px;
+    font-size: 1.2rem; /* Tamaño de fuente aumentado para las instrucciones */
+    font-weight: semi-bold; /* Negrita para resaltar */
+    color: #333; /* Color de texto oscuro */
+    margin: 0; /* Eliminar márgenes predeterminados */
+    text-align: left; /* Alineación de texto a la izquierda */
+}
+
+/* Estilos para botones específicos para IPAQForm */
+.IPAQForm-container button {
+    padding: 10px 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #004466; /* Color de fondo para botones */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.IPAQForm-container button:hover {
+    background-color: #003355; /* Color más oscuro para hover */
+}
+
+/* Estilo para mensajes de error o información específicos para IPAQForm */
+.IPAQForm-container .formInput span {
+    font-size: 12px;
+    color: red;
+}
+
+/* Estilo específico para radio y checkbox en IPAQForm */
+.IPAQForm-container .timeInput input[type="radio"],
+.IPAQForm-container .timeInput input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.IPAQForm-container .timeInput label {
+    margin-right: 20px; /* Espacio entre radio/checkbox y su etiqueta */
+}
+
+/* Ajustes para dispositivos móviles específicos para IPAQForm */
+@media (max-width: 600px) {
+    .IPAQForm-container {
+        padding: 10px;
+    }
+
+    .IPAQForm-container .formInput {
+        margin-bottom: 15px;
+    }
+
+    .IPAQForm-container .formInput label {
+        font-size: 14px;
+    }
+
+    .IPAQForm-container input,
+    .IPAQForm-container select,
+    .IPAQForm-container button {
+        font-size: 14px;
+    }
+}
+/* Estilos generales para los elementos dentro de .timeInput */
+.IPAQForm-container .timeInput input,
+.IPAQForm-container .timeInput label {
+    transition: opacity 0.3s ease; /* Transición suave para la opacidad */
+}
+
+/* Estilo para elementos no seleccionados (los podrías usar para los que no están en foco o no activos) */
+.IPAQForm-container .timeInput.unselected input,
+.IPAQForm-container .timeInput.unselected label {
+    opacity: 0.5; /* Opacidad reducida para elementos no seleccionados */
+    pointer-events: none; /* Desactiva la interacción con estos elementos */
+}
+
+/* Estilo para mantener normal los elementos seleccionados */
+.IPAQForm-container .timeInput.selected input,
+.IPAQForm-container .timeInput.selected label {
+    opacity: 1; /* Opacidad normal para elementos seleccionados */
+}
+
+/* Estilo para elementos deshabilitados o cuando "No estoy seguro" está activo */
+.IPAQForm-container .timeInput.disabled input,
+.IPAQForm-container .timeInput.disabled label {
+    opacity: 0.4; /* Opacidad reducida para elementos deshabilitados */
+    pointer-events: none; /* Desactiva la interacción con estos elementos */
+}
+
+/* Podrías querer agregar estilos adicionales para mejorar la interactividad y accesibilidad */
+input:disabled,
+select:disabled {
+    cursor: not-allowed; /* Cambia el cursor para indicar que el elemento no está disponible */
+    background-color: #f3f3f3; /* Color de fondo para indicar desactivación */
+}
+
+/* Estilos para botones */
+button {
+    cursor: pointer; /* Asegúrate de que los botones sean reconocibles como interactivos */
+    /* Resto de tus estilos para botones */
+}
+
+/* Media queries para diferentes tamaños de pantalla */
+@media (max-width: 600px) {
+    /* Tus estilos responsivos */
+}
+
+.card {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px; /* Aumenta el padding si es necesario */
+    background-color: #d1cfcf;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd; /* Agrega un borde sutil */
+  }
+  
+  .card-header {
+    color: #004466;
+    text-align: center; /* Si quieres que el título esté centrado */
+  }
+  
+  .IPAQForm-content {
+    display: flex;
+    flex-direction: column; /* Usa 'row' si prefieres una disposición horizontal */
+    
+  }
+  
+  /* Si quieres que los elementos estén en una sola línea horizontal */
+  @media (min-width: 768px) { /* Ajusta este valor según el punto de ruptura deseado */
+    .IPAQForm-content {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between; /* Esto espaciará los elementos uniformemente */
+    }
+    .IPAQForm-content .formInput {
+      /* Ajustes para que los formInput no se expandan demasiado en pantallas grandes */
+      flex: 1;
+      margin-right: 10px; /* Añade un margen derecho si es necesario */
+    }
+    .IPAQForm-content .formInput:last-child {
+      margin-right: 0; /* No margen derecho para el último elemento */
+    }
+  }
+  /* Asegúrate de que el resto de tus estilos de card se apliquen aquí también */
+  
