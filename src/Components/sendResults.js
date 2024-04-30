@@ -1,6 +1,7 @@
 import emailjs from '@emailjs/browser';
 
-export const sendEmailResults = (results, resetAppCallback) => {
+export const sendEmailResults = (results) => {
+  return new Promise((resolve, reject) => {
     const templateParams = {
       testName2: 'Inventario de Depresión de Beck II',
       testScore2: typeof results['2'] === 'object' ? JSON.stringify(results['2']) : results['2'],
@@ -29,13 +30,14 @@ export const sendEmailResults = (results, resetAppCallback) => {
       userChronologicalAge: results.formulario.edadCronologica,
     };
 
-  emailjs.send('service_olt7vkp', 'template_2m4f22t', templateParams, 'lnP-HAATjvaBg4IzL')
-    .then(response => {
-      console.log('SUCCESS!', response.status, response.text);
-    //   alert('Resultados enviados correctamente!');
-      resetAppCallback(); // Llama a la función de restablecimiento pasada como callback
-    }, error => {
-      console.log('FAILED...', error);
-      alert('Error al enviar los resultados. Inténtalo de nuevo.');
-    });
+    emailjs.send('service_olt7vkp', 'template_2m4f22t', templateParams, 'lnP-HAATjvaBg4IzL')
+      .then((response) => {
+        console.log('Resultados enviados correctamente:', response);
+        resolve();
+      })
+      .catch((error) => {
+        console.error('Error al enviar los resultados:', error);
+        reject(error);
+      });
+  });
 };

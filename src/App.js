@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Question from './Components/Question';
 import { questionsData } from './Components/questions.js';
 import { useResults } from './Components/ResultsContext';
@@ -29,7 +29,10 @@ function App() {
   const isTestCompleted = (testId) => {
     return results.hasOwnProperty(testId);
   };
-    const [alertShown, setAlertShown] = useState(false);
+  const [alertShown, setAlertShown] = useState(false);
+  const confirmationMessageRef = useRef(null);
+  const countdownMessageRef = useRef(null);
+  const [resultsSent, setResultsSent] = useState(false);
 
   //Aqui comienzan las declaraciones para el formulario
   const [formCompleted, setFormCompleted] = useState(false);
@@ -247,28 +250,71 @@ const handlePreviousClick = () => {
   }
 };
 
-function handleSendResults() {
-  // Cambia el estado de tu botón a 'enviado'
-  const sendButton = document.querySelector('.send-button');
-  const sendIcon = document.querySelector('.send-icon');
-  const confirmationMessage = document.querySelector('#confirmation-message');
-  
-  sendButton.disabled = true; // Deshabilitar el botón después de clickear
-  sendIcon.style.animation = 'fly-out 0.5s ease forwards'; // Inicia la animación
+// SE UTILIZA AHORA UN ESE EFFECT
+// function handleSendResults() {
+//   if (!resultsSent) {
+//     setResultsSent(true);
 
-  setTimeout(() => {
-    // Aquí se llamaría a la función o servicio que enviará los datos, después de la animación
-    confirmationMessage.textContent = 'Resultados enviados. No es necesario hacer nada más.';
-    // Aquí puedes establecer un tiempo de espera antes de reiniciar la aplicación
-    setTimeout(() => {
-      console.log('Reiniciando la aplicación...');
-      sendEmailResults(results, resetApp); // Pasa los resultados y la función de reset a sendEmailResults
-      console.log('resultados enviados:', results);
-      resetApp();
-      // Aquí regresas al formulario inicial
-    }, 3500);
-  }, 1500);
-}
+//     // Llamar a la función para enviar los resultados por email
+//     sendEmailResults(results)
+//       .then(() => {
+//         if (confirmationMessageRef.current) {
+//           confirmationMessageRef.current.textContent = 'Resultados enviados correctamente.';
+//         }
+        
+//         // Iniciar cuenta regresiva antes de reiniciar la aplicación
+//         let countdown = 5;
+//         const countdownInterval = setInterval(() => {
+//           if (countdownMessageRef.current) {
+//             countdownMessageRef.current.textContent = `La aplicación se reiniciará en ${countdown} segundos...`;
+//           }
+//           countdown--;
+//           if (countdown < 0) {
+//             clearInterval(countdownInterval);
+//             resetApp();
+//           }
+//         }, 1000);
+//       })
+//       .catch((error) => {
+//         console.error('Error al enviar los resultados:', error);
+//         if (confirmationMessageRef.current) {
+//           confirmationMessageRef.current.textContent = 'Error al enviar los resultados. Por favor, inténtalo nuevamente.';
+//         }
+//       });
+//   }
+// }
+useEffect(() => {
+  if (currentTestId === null && !resultsSent) {
+    setResultsSent(true);
+
+    // Llamar a la función para enviar los resultados por email
+    sendEmailResults(results)
+      .then(() => {
+        if (confirmationMessageRef.current) {
+          confirmationMessageRef.current.textContent = 'Resultados enviados correctamente.';
+        }
+        
+        // Iniciar cuenta regresiva antes de reiniciar la aplicación
+        let countdown = 5;
+        const countdownInterval = setInterval(() => {
+          if (countdownMessageRef.current) {
+            countdownMessageRef.current.textContent = `La aplicación se reiniciará en ${countdown} segundos...`;
+          }
+          countdown--;
+          if (countdown < 0) {
+            clearInterval(countdownInterval);
+            resetApp();
+          }
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error('Error al enviar los resultados:', error);
+        if (confirmationMessageRef.current) {
+          confirmationMessageRef.current.textContent = 'Error al enviar los resultados. Por favor, inténtalo nuevamente.';
+        }
+      });
+  }
+}, [currentTestId, resultsSent, results]);
 
 const resetApp = () => {
   // Limpia los resultados y restablece los estados iniciales
@@ -338,19 +384,20 @@ if (showTransition) {
 }
 // Renderizado condicional basado en si se completaron todas las pruebas o no
 else if (currentTestId === null) {
-  // Mensaje de pruebas completadas con botón de envío
-  return (
-    <div className="App">
-      <div className="card send-results-container">
-        <p className="send-results-message">¡Felicidades! Has completado todas las pruebas.</p>
-        <button className="send-button" onClick={handleSendResults}>
-          <FontAwesomeIcon icon={faPaperPlane} className="send-icon" />
-          Enviar Resultados
-        </button>
-        <p className="send-results-message" id="confirmation-message"></p>
+return (
+  <div className="App">
+    <div className="card send-results-container">
+      <h2 className="send-results-title">¡Felicidades!</h2>
+      <p className="send-results-message">Has completado todas las pruebas.</p>
+      <div className="send-results-loading">
+        <div className="loading-spinner"></div>
+        <p className="loading-message">Los resultados se están enviando...</p>
       </div>
+      <p className="send-results-countdown" ref={countdownMessageRef}></p>
+      <p className="send-results-confirmation" ref={confirmationMessageRef}></p>
     </div>
-  );
+  </div>
+);
 } else {
   // Renderizado normal de las pruebas
   return (
