@@ -38,6 +38,9 @@ function App() {
   const [formCompleted, setFormCompleted] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
   
+  // Nuevo estado para controlar la versión de la aplicación
+  const [withoutSalamanca, setWithoutSalamanca] = useState(false);
+
   // Definición de los inputs del formulario
   const inputs = [
     {
@@ -120,18 +123,31 @@ function App() {
   useEffect(() => {
     if (currentTestId) {
       setLoading(true);
-      const test = questionsData.find(test => test.testId === currentTestId);
+      let filteredQuestionsData = questionsData;
+      
+      // Filtrar la prueba de Salamanca si es necesario
+      if (withoutSalamanca) {
+        filteredQuestionsData = questionsData.filter(test => test.testId !== '9');
+      }
+  
+      const test = filteredQuestionsData.find(test => test.testId === currentTestId);
       if (test) {
         setQuestions(test.questions);
         setScores(Array(test.questions.length).fill(null));
       } else {
-        // alert('Test no encontrado: ' + currentTestId);
         setCurrentTestId(null);
       }
       setLoading(false);
     }
-  }, [currentTestId]);
+  }, [currentTestId, withoutSalamanca]);
 
+  // Efecto para comprobar el parámetro de URL al cargar la aplicación
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const version = params.get('version');
+    setWithoutSalamanca(version === 'withoutSalamanca');
+  }, []);
+  
   // // Este efecto se ejecutará cada vez que finished cambie y se asegurará de que se muestre el mensaje de alerta solo una vez por prueba el cual indica que la prueba se ha completado
   // useEffect(() => {
   //   if (finished && !alertShown) {
@@ -164,16 +180,18 @@ function App() {
 
   const renderTestButtons = () => (
     <div className="test-buttons-container">
-      {questionsData.map((test) => (
-        <button
-          key={test.testId}
-          className={`test-button ${currentTestId === test.testId ? 'active-test' : ''}`}
-          disabled={isTestCompleted(test.testId)}
-          onClick={() => setCurrentTestId(test.testId)}
-        >
-          {test.testName || 'Nombre no definido'} {isTestCompleted(test.testId) ? '✓' : ''}
-        </button>
-      ))}
+      {questionsData
+        .filter(test => !withoutSalamanca || test.testId !== '9')
+        .map((test) => (
+          <button
+            key={test.testId}
+            className={`test-button ${currentTestId === test.testId ? 'active-test' : ''}`}
+            disabled={isTestCompleted(test.testId)}
+            onClick={() => setCurrentTestId(test.testId)}
+          >
+            {test.testName || 'Nombre no definido'} {isTestCompleted(test.testId) ? '✓' : ''}
+          </button>
+        ))}
     </div>
   );
 
@@ -181,23 +199,29 @@ function App() {
   const handleFinishTest = () => {
     const totalScore = calculateTotalScore(currentTestId, scores, questions);
     addResult(currentTestId, totalScore);
-    setShowTransition(true); // Mostrar transición
+    setShowTransition(true);
     setTimeout(() => {
-      // Busca la siguiente prueba no completada
-      const nextTest = questionsData.find(
-        (test) => !isTestCompleted(test.testId) && test.testId !== currentTestId
-      );
+      let nextTest;
+      if (withoutSalamanca) {
+        nextTest = questionsData.find(
+          (test) => !isTestCompleted(test.testId) && test.testId !== currentTestId && test.testId !== '9'
+        );
+      } else {
+        nextTest = questionsData.find(
+          (test) => !isTestCompleted(test.testId) && test.testId !== currentTestId
+        );
+      }
       
       if (nextTest) {
         setCurrentTestId(nextTest.testId);
         setCurrentQuestion(0);
         setScores(Array(nextTest.questions.length).fill(null));
       } else {
-        setCurrentTestId(null); // No hay más pruebas, se establece a null
+        setCurrentTestId(null);
       }
-      setShowTransition(false); // Oculta la pantalla de transición
-      setFinished(false); // Restablece para la nueva prueba
-      }, 1000); // 1 segundos de transición
+      setShowTransition(false);
+      setFinished(false);
+    }, 1000);
   };
 
   // Este efecto maneja la finalización de una prueba y pasa a la siguiente
