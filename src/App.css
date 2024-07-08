@@ -1,8 +1,21 @@
-.App {
-  text-align: center; /* Esto centrará el texto y cualquier elemento inline, como imágenes, pero no los bloques */
-  min-height: 100vh;
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.App {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px; /* Ajusta este valor según sea necesario */
+}
 /* Añade esta clase en tu archivo CSS */
 .form-container {
   display: flex;
@@ -17,8 +30,6 @@
   color: #333; /* Color del texto */
   /* Puedes añadir más estilos aquí si lo deseas */
 }
-
-
 
 form {
   width: 100%; /* O el ancho máximo que desees para tu formulario */
