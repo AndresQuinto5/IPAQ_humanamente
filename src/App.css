@@ -28,11 +28,8 @@ body, html {
   font-size: 2rem; /* Tamaño de fuente inicial */
   margin-bottom: 20px; /* Espacio entre el título y el primer input del formulario */
   color: #333; /* Color del texto */
-  /* Puedes añadir más estilos aquí si lo deseas */
-}
-
-h1 {
   text-align: justify;
+  /* Puedes añadir más estilos aquí si lo deseas */
 }
 
 form {
