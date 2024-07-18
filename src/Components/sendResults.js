@@ -30,7 +30,12 @@ export const sendEmailResults = (results) => {
       userChronologicalAge: results.formulario.edadCronologica,
     };
 
-    emailjs.send('service_olt7vkp', 'template_2m4f22t', templateParams, 'lnP-HAATjvaBg4IzL')
+    emailjs.send(
+      process.env.REACT_APP_EMAILJS_SERVICE_ID,
+      process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+      templateParams,
+      process.env.REACT_APP_EMAILJS_USER_ID
+    )
       .then((response) => {
         console.log('Resultados enviados correctamente:', response);
         resolve();

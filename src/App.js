@@ -9,6 +9,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { sendEmailResults } from './Components/sendResults'; // Asegúrate de que la ruta sea correcta
 import IPAQForm from './Components/IPAQForm.jsx';
 import "./App.css"
+
 const initialFormValues = {
   nombre: "",
   Apellido: "",
