@@ -6,9 +6,13 @@ import calculateTotalScore from './utils/ScoreCalculator';
 import FormInput from './Components/FormInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { sendEmailResults } from './Components/sendResults'; // Asegúrate de que la ruta sea correcta
+import { sendEmailResults, sendNotificationEmail} from './Components/sendResults'; // Asegúrate de que la ruta sea correcta
 import IPAQForm from './Components/IPAQForm.jsx';
 import "./App.css"
+import professionalsData from './professionals';
+import AutocompleteInput from './utils/AutocompleteInput';
+
+const professionals = professionalsData.professionalsData || [];
 
 const initialFormValues = {
   nombre: "",
@@ -16,6 +20,7 @@ const initialFormValues = {
   fechaNacimiento: "",
   email: "",
   referente: "",
+  referenteEmail: "",
 };
 
 function App() {
@@ -90,14 +95,15 @@ function App() {
     {
       id: 5,
       name: "referente",
-      type: "text",
-      placeholder: "Médico o psicólogo tratante",
-      errorMessage: "Este campo es requerido",
+      type: "autocomplete",
+      placeholder: "Buscar médico o psicólogo tratante",
+      errorMessage: "Debe seleccionar un profesional",
       label: "Referente",
       required: true,
-    },
-    
+      options: professionals.map(prof => prof.name)
+    }
   ];
+
   //IPAQ
   const [showIPAQForm, setShowIPAQForm] = useState(false);
 
@@ -266,7 +272,23 @@ const handleSubmit = (e) => {
 };
 
 const onChange = (e) => {
-  setFormValues({ ...formValues, [e.target.name]: e.target.value });
+  const { name, value } = e.target;
+  
+  if (name === "referente") {
+    const selectedProfessional = professionals.find(prof => prof.name === value);
+    if (selectedProfessional) {
+      setFormValues(prevValues => ({
+        ...prevValues,
+        [name]: value,
+        referenteEmail: selectedProfessional.email
+      }));
+    }
+  } else {
+    setFormValues(prevValues => ({
+      ...prevValues,
+      [name]: value
+    }));
+  }
 };
 //handle para respuesta anterior:
 const handlePreviousClick = () => {
@@ -312,11 +334,20 @@ useEffect(() => {
   if (currentTestId === null && !resultsSent) {
     setResultsSent(true);
 
-    // Llamar a la función para enviar los resultados por email
     sendEmailResults(results)
       .then(() => {
+        console.log('Resultados enviados correctamente:', results);
         if (confirmationMessageRef.current) {
           confirmationMessageRef.current.textContent = 'Resultados enviados correctamente.';
+        }
+        
+        // Llamar a sendNotificationEmail con los mismos datos de results
+        return sendNotificationEmail(results);
+      })
+      .then(() => {
+        console.log('Notificación enviada al profesional referente:', results);
+        if (confirmationMessageRef.current) {
+          confirmationMessageRef.current.textContent += ' Notificación enviada al profesional referente.';
         }
         
         // Iniciar cuenta regresiva antes de reiniciar la aplicación
@@ -333,13 +364,15 @@ useEffect(() => {
         }, 1000);
       })
       .catch((error) => {
-        console.error('Error al enviar los resultados:', error);
+        console.error('Error al enviar los resultados o la notificación:', error);
         if (confirmationMessageRef.current) {
-          confirmationMessageRef.current.textContent = 'Error al enviar los resultados. Por favor, inténtalo nuevamente.';
+          confirmationMessageRef.current.textContent = 'Error al enviar los resultados o la notificación. Por favor, inténtalo nuevamente.';
         }
       });
   }
 }, [currentTestId, resultsSent, results]);
+
+
 
 const resetApp = () => {
   // Limpia los resultados y restablece los estados iniciales
@@ -384,14 +417,23 @@ if (!formCompleted) {
       <div className="form-container">
         <form onSubmit={handleSubmit}>
           <h1>Rellene la información requerida a continuación.</h1>
-          {inputs.map((input) => (
-            <FormInput
-              key={input.id}
-              {...input}
-              value={formValues[input.name]}
-              onChange={onChange}
-            />
-          ))}
+            {inputs.map((input) => (
+              input.type === "autocomplete" ? (
+                <AutocompleteInput
+                  key={input.id}
+                  {...input}
+                  value={formValues[input.name]}
+                  onChange={onChange}
+                />
+              ) : (
+                <FormInput
+                  key={input.id}
+                  {...input}
+                  value={formValues[input.name]}
+                  onChange={onChange}
+                />
+              )
+            ))}
           <button type="submit" className="ComenzarP">Comenzar pruebas</button>
         </form>
       </div>

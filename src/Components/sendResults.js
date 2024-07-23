@@ -26,6 +26,7 @@ export const sendEmailResults = (results) => {
       userBirthdate: results.formulario.fechaNacimiento,
       userEmail: results.formulario.email,
       userReferrer: results.formulario.referente,
+      userReferrerEmail: results.formulario.referenteEmail,
       userAge: results.formulario.edadActual,
       userChronologicalAge: results.formulario.edadCronologica,
     };
@@ -42,6 +43,35 @@ export const sendEmailResults = (results) => {
       })
       .catch((error) => {
         console.error('Error al enviar los resultados:', error);
+        reject(error);
+      });
+  });
+};
+
+export const sendNotificationEmail = (patientInfo) => {
+  return new Promise((resolve, reject) => {
+    const templateParams = {
+      to_email: patientInfo.formulario.referenteEmail,
+      to_name: patientInfo.formulario.referente,
+      patient_name: `${patientInfo.formulario.nombre} ${patientInfo.formulario.Apellido}`,
+      patient_email: patientInfo.formulario.email,
+      patient_age: patientInfo.formulario.edadCronologica,
+      userAge: patientInfo.formulario.edadActual,
+      userBirthdate: patientInfo.formulario.fechaNacimiento,
+    };
+
+    emailjs.send(
+      process.env.REACT_APP_EMAILJS_SERVICE_ID,
+      process.env.REACT_APP_EMAILJS_NOTIFICATION_TEMPLATE_ID,
+      templateParams,
+      process.env.REACT_APP_EMAILJS_USER_ID
+    )
+      .then((response) => {
+        console.log('Notificación enviada correctamente:', response);
+        resolve();
+      })
+      .catch((error) => {
+        console.error('Error al enviar la notificación:', error);
         reject(error);
       });
   });

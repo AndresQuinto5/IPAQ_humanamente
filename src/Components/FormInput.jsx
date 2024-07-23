@@ -54,6 +54,30 @@ if (inputProps.type === "email") {
   );
 }
 
+// Agrega esta nueva condición justo antes del return final
+if (inputProps.type === "select") {
+  return (
+    <div className="formInput">
+      <label>{label}</label>
+      <select
+        {...inputProps}
+        onChange={onChange}
+        onBlur={handleBlur}
+        onFocus={() => setFocused(true)}
+        focused={focused.toString()}
+      >
+        <option value="">Seleccione una opción</option>
+        {options.map((option, index) => (
+          <option key={index} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+      <span>{errorMessage}</span>
+    </div>
+  );
+}
+
   return (
     <div className="formInput">
       <label>{label}</label>
