@@ -1,5 +1,10 @@
 import emailjs from '@emailjs/browser';
 
+/**
+ * Sends test results via email using EmailJS.
+ * @param {Object} results - Object containing test results and user information.
+ * @returns {Promise} A promise that resolves when the email is sent successfully, or rejects on error.
+ */
 export const sendEmailResults = (results) => {
   return new Promise((resolve, reject) => {
     const templateParams = {
@@ -48,6 +53,11 @@ export const sendEmailResults = (results) => {
   });
 };
 
+/**
+ * Sends a notification email to the referrer using EmailJS.
+ * @param {Object} patientInfo - Object containing patient information.
+ * @returns {Promise} A promise that resolves when the email is sent successfully, or rejects on error.
+ */
 export const sendNotificationEmail = (patientInfo) => {
   return new Promise((resolve, reject) => {
     const templateParams = {
