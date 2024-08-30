@@ -72,14 +72,16 @@ const AutocompleteInput = ({ options, label, errorMessage, onChange, value, name
 
   return (
     <div className="autocomplete-input">
-      <label>{label}</label>
+      <label htmlFor={name}>{label}</label>
       <input
+        id={name}
         ref={inputRef}
         type="text"
         value={inputValue}
         onChange={handleInputChange}
         onFocus={handleInputFocus}
         required={required}
+        aria-label={label}
       />
       {showModal && (
         <div className="modal-overlay">
