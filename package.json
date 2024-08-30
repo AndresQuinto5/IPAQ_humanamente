@@ -45,5 +45,9 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "depcheck": "^1.4.3"
+  },
+  
+  "engines": {
+    "node": ">=16"
   }
 }
