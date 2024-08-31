@@ -164,6 +164,7 @@ function App() {
       if (test) {
         setQuestions(test.questions);
         setScores(Array(test.questions.length).fill(null));
+        setCurrentQuestion(0); // Reset current question to 0
       } else {
         setCurrentTestId(null);
       }
@@ -218,7 +219,13 @@ function App() {
             key={test.testId}
             className={`test-button ${currentTestId === test.testId ? 'active-test' : ''}`}
             disabled={isTestCompleted(test.testId)}
-            onClick={() => setCurrentTestId(test.testId)}
+            onClick={() => {
+              if (currentTestId !== test.testId) {
+                setCurrentTestId(test.testId);
+                setCurrentQuestion(0);
+                setScores(Array(test.questions.length).fill(null));
+              }
+            }}
           >
             {test.testName || 'Nombre no definido'} {isTestCompleted(test.testId) ? '✓' : ''}
           </button>

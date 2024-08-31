@@ -4,9 +4,9 @@ import './IPAQForm.css';
 const IPAQForm = ({ onSubmit }) => {
   const initialState = {
     question1: '0',
-    question2: { type: 'hours', hours: '1', minutes: '0', notSure: false },
+    question2: { type: 'hours', hours: '1', minutes: '0' },
     question3: '0',
-    question4: { type: 'hours', hours: '1', minutes: '0', notSure: false },
+    question4: { type: 'hours', hours: '1', minutes: '0' },
     question5: '0',
     question6: { type: 'hours', hours: '0', minutes: '0', notSure: false },
     question7: { type: 'hours', hours: '0', minutes: '0', notSure: false },
@@ -21,9 +21,9 @@ const IPAQForm = ({ onSubmit }) => {
     if (type === 'radio') {
       setIpaQResponses(prev => ({
         ...prev,
-        [`question${questionNumber}`]: { ...prev[`question${questionNumber}`], type: value, hours: '1', minutes: '0', notSure: false },
+        [`question${questionNumber}`]: { ...prev[`question${questionNumber}`], type: value, hours: '1', minutes: '0' },
       }));
-    } else if (type === 'checkbox') {
+    } else if (type === 'checkbox' && questionNumber !== 2 && questionNumber !== 4) {
       setIpaQResponses(prev => ({
         ...prev,
         [`question${questionNumber}`]: { ...prev[`question${questionNumber}`], notSure: checked, hours: checked ? '1' : prev[`question${questionNumber}`].hours, minutes: checked ? '0' : prev[`question${questionNumber}`].minutes },
@@ -32,14 +32,13 @@ const IPAQForm = ({ onSubmit }) => {
       setIpaQResponses(prev => ({ 
         ...prev, 
         [name]: value,
-        // Resetear la siguiente pregunta si se selecciona "Ninguna"
         [`question${parseInt(name.slice(-1)) + 1}`]: value === '0' ? initialState[`question${parseInt(name.slice(-1)) + 1}`] : prev[`question${parseInt(name.slice(-1)) + 1}`]
       }));
     } else {
       // Lógica para horas y minutos
       let newValue = value;
       if (name.endsWith('Hours')) {
-        newValue = value === '0' ? '1' : value; // Asegurarse de que el mínimo sea 1 para las preguntas 2 y 4
+        newValue = value === '0' ? '1' : value;
       }
       if (name.endsWith('Minutes') && (parseInt(value) < 0 || parseInt(value) > 59)) {
         newValue = '0';
@@ -105,7 +104,7 @@ const IPAQForm = ({ onSubmit }) => {
           {currentQuestion === 2 && ipaQResponses.question1 !== '0' && (
             <div className="formInput">
               <label htmlFor="question2">¿Cuánto tiempo en total le tomó realizar actividades físicas vigorosas en uno de esos días?</label>
-              <div className={`timeInput ${ipaQResponses.question2.notSure ? 'disabled' : ''}`}>
+              <div className="timeInput">
                 <input
                   type="radio"
                   id="question2TypeHours"
@@ -113,7 +112,6 @@ const IPAQForm = ({ onSubmit }) => {
                   value="hours"
                   checked={ipaQResponses.question2.type === 'hours'}
                   onChange={(e) => handleInputChange(e, 2)}
-                  disabled={ipaQResponses.question2.notSure}
                 />
                 <label htmlFor="question2TypeHours">Horas por día</label>
                 <select
@@ -121,14 +119,14 @@ const IPAQForm = ({ onSubmit }) => {
                   name="question2Hours"
                   value={ipaQResponses.question2.hours}
                   onChange={(e) => handleInputChange(e, 2)}
-                  disabled={ipaQResponses.question2.type !== 'hours' || ipaQResponses.question2.notSure}
+                  disabled={ipaQResponses.question2.type !== 'hours'}
                 >
                   {Array.from({ length: 16 }, (_, i) => (
                     <option key={i} value={(i + 1).toString()}>{i + 1}</option>
                   ))}
                 </select>
               </div>
-              <div className={`timeInput`}>
+              <div className="timeInput">
                 <input
                   type="radio"
                   id="question2TypeMinutes"
@@ -136,7 +134,6 @@ const IPAQForm = ({ onSubmit }) => {
                   value="minutes"
                   checked={ipaQResponses.question2.type === 'minutes'}
                   onChange={(e) => handleInputChange(e, 2)}
-                  disabled={ipaQResponses.question2.notSure}
                 />
                 <label htmlFor="question2TypeMinutes">Minutos por día</label>
                 <select
@@ -144,22 +141,12 @@ const IPAQForm = ({ onSubmit }) => {
                   name="question2Minutes"
                   value={ipaQResponses.question2.minutes}
                   onChange={(e) => handleInputChange(e, 2)}
-                  disabled={ipaQResponses.question2.type !== 'minutes' || ipaQResponses.question2.notSure}
+                  disabled={ipaQResponses.question2.type !== 'minutes'}
                 >
                   {Array.from({ length: 41 }, (_, i) => (
                     <option key={i} value={i + 10}>{i + 10}</option>
                   ))}
                 </select>
-              </div>
-              <div>
-                <input
-                  type="checkbox"
-                  id="question2NotSure"
-                  name="question2NotSure"
-                  checked={ipaQResponses.question2.notSure}
-                  onChange={(e) => handleInputChange(e, 2)}
-                />
-                <label htmlFor="question2NotSure">No estoy seguro</label>
               </div>
               <button type="button" onClick={previousQuestion}>Regresar</button>
               <button type="button" onClick={nextQuestion}>Siguiente</button>
@@ -188,7 +175,7 @@ const IPAQForm = ({ onSubmit }) => {
           {currentQuestion === 4 && ipaQResponses.question3 !== '0' && (
             <div className="formInput">
               <label htmlFor="question4">Usualmente, ¿cuánto tiempo dedica usted en uno de esos días haciendo actividades físicas moderadas?</label>
-              <div className={`timeInput ${ipaQResponses.question4.notSure ? 'disabled' : ''}`}>
+              <div className="timeInput">
                 <input
                   type="radio"
                   id="question4TypeHours"
@@ -196,7 +183,6 @@ const IPAQForm = ({ onSubmit }) => {
                   value="hours"
                   checked={ipaQResponses.question4.type === 'hours'}
                   onChange={(e) => handleInputChange(e, 4)}
-                  disabled={ipaQResponses.question4.notSure}
                 />
                 <label htmlFor="question4TypeHours">Horas por día</label>
                 <select
@@ -204,14 +190,14 @@ const IPAQForm = ({ onSubmit }) => {
                   name="question4Hours"
                   value={ipaQResponses.question4.hours}
                   onChange={(e) => handleInputChange(e, 4)}
-                  disabled={ipaQResponses.question4.type !== 'hours' || ipaQResponses.question4.notSure}
+                  disabled={ipaQResponses.question4.type !== 'hours'}
                 >
                   {Array.from({ length: 16 }, (_, i) => (
                     <option key={i} value={(i + 1).toString()}>{i + 1}</option>
                   ))}
                 </select>
               </div>
-              <div className={`timeInput`}>
+              <div className="timeInput">
                 <input
                   type="radio"
                   id="question4TypeMinutes"
@@ -219,7 +205,6 @@ const IPAQForm = ({ onSubmit }) => {
                   value="minutes"
                   checked={ipaQResponses.question4.type === 'minutes'}
                   onChange={(e) => handleInputChange(e, 4)}
-                  disabled={ipaQResponses.question4.notSure}
                 />
                 <label htmlFor="question4TypeMinutes">Minutos por día</label>
                 <select
@@ -227,22 +212,12 @@ const IPAQForm = ({ onSubmit }) => {
                   name="question4Minutes"
                   value={ipaQResponses.question4.minutes}
                   onChange={(e) => handleInputChange(e, 4)}
-                  disabled={ipaQResponses.question4.type !== 'minutes' || ipaQResponses.question4.notSure}
+                  disabled={ipaQResponses.question4.type !== 'minutes'}
                 >
                   {Array.from({ length: 41 }, (_, i) => (
                     <option key={i} value={i + 10}>{i + 10}</option>
                   ))}
                 </select>
-              </div>
-              <div>
-                <input
-                  type="checkbox"
-                  id="question4NotSure"
-                  name="question4NotSure"
-                  checked={ipaQResponses.question4.notSure}
-                  onChange={(e) => handleInputChange(e, 4)}
-                />
-                <label htmlFor="question4NotSure">No estoy seguro</label>
               </div>
               <button type="button" onClick={previousQuestion}>Regresar</button>
               <button type="button" onClick={nextQuestion}>Siguiente</button>
