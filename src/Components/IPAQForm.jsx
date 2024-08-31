@@ -21,12 +21,22 @@ const IPAQForm = ({ onSubmit }) => {
     if (type === 'radio') {
       setIpaQResponses(prev => ({
         ...prev,
-        [`question${questionNumber}`]: { ...prev[`question${questionNumber}`], type: value, hours: '1', minutes: '0' },
+        [`question${questionNumber}`]: { 
+          ...prev[`question${questionNumber}`], 
+          type: value, 
+          hours: value === 'hours' ? '1' : '0',
+          minutes: value === 'minutes' ? '10' : '0'
+        },
       }));
     } else if (type === 'checkbox' && questionNumber !== 2 && questionNumber !== 4) {
       setIpaQResponses(prev => ({
         ...prev,
-        [`question${questionNumber}`]: { ...prev[`question${questionNumber}`], notSure: checked, hours: checked ? '1' : prev[`question${questionNumber}`].hours, minutes: checked ? '0' : prev[`question${questionNumber}`].minutes },
+        [`question${questionNumber}`]: { 
+          ...prev[`question${questionNumber}`], 
+          notSure: checked, 
+          hours: checked ? '0' : prev[`question${questionNumber}`].hours, 
+          minutes: checked ? '0' : prev[`question${questionNumber}`].minutes 
+        },
       }));
     } else if (['question1', 'question3', 'question5'].includes(name)) {
       setIpaQResponses(prev => ({ 
@@ -35,7 +45,7 @@ const IPAQForm = ({ onSubmit }) => {
         [`question${parseInt(name.slice(-1)) + 1}`]: value === '0' ? initialState[`question${parseInt(name.slice(-1)) + 1}`] : prev[`question${parseInt(name.slice(-1)) + 1}`]
       }));
     } else {
-      // Lógica para horas y minutos
+      // Logic for hours and minutes
       let newValue = value;
       if (name.endsWith('Hours')) {
         newValue = value === '0' ? '1' : value;
@@ -44,9 +54,14 @@ const IPAQForm = ({ onSubmit }) => {
         newValue = '0';
       }
       const fieldToUpdate = name.endsWith('Hours') ? 'hours' : 'minutes';
+      const otherField = fieldToUpdate === 'hours' ? 'minutes' : 'hours';
       setIpaQResponses(prev => ({
         ...prev,
-        [`question${questionNumber}`]: { ...prev[`question${questionNumber}`], [fieldToUpdate]: newValue },
+        [`question${questionNumber}`]: { 
+          ...prev[`question${questionNumber}`], 
+          [fieldToUpdate]: newValue,
+          [otherField]: '0' // Reset the other field to 0
+        },
       }));
     }
   };
